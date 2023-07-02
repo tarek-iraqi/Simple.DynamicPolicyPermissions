@@ -229,24 +229,18 @@ To solve that you must do two things:
 That is all you need to know to work with the library, for examples you can see the project `Simple.DynamicPermissions.TestWebApi` in the repo.
 
 ## Some points to mention
-- Some can argue that the solution of keeping user permissions in user token or cookie is not valid or effective in specific
-cases, such as what if while the user is logged in his permissions is changed by the administrator by
-adding more permissions or removing extra access, in this scenario the user is still maintaining the
-old permissions from his access token, not the new ones.
+- Some people argue that keeping user permissions in user tokens or cookies may not always be effective. For instance, if an administrator changes a user's permissions while they are logged in, the user may still have their old permissions from their access token instead of the new ones.
 
-- I have faced the same problem one time and it has a very simple solution, just keep track of a specific value in the access token such as
-timestamp or security stamp and when the user permissions change you update this value in the database or better in a cache layer, so in the
-next request with the old access token there will be a difference between the token value and the cached value so you can revoke
-the token and return an UnAuthorized response so the user log in again and get the new permissions or better
-return a specific response to the front so it can make a silent call to refresh the user token
-without the user logging out or feeling any change.
+- However, there is a simple solution to this problem. By keeping track of a specific value
+in the access token, like a timestamp or security stamp, you can update this value in your 
+database or cache layer when the user's permissions change. 
+Then, in the next request with the old access token, you can compare the token value with 
+the cached value and revoke the token if they don't match.
+This will prompt the user to log in again and get the new permissions.
 
-- Also, do not forget two important facts about tokens and permissions, first the best practice for a token lifetime is to be short and refreshed in small
-intervals for security reasons so the user most likely will gain the new permissions if changed. The
-the second point is that permissions changing are not always something done every day, we can consider
-it is a setup done at application's first run and often changes at long intervals across the
-app lifetime, so this problem will probably not be caused or noticed in most cases.
+- Another better and clean solution is you can send a particular response to the user interface
+so that it can refresh the user token without the user having to log out or notice any changes.
 
-- At the last we all try to implement a simple and effective solutions not over engineering stuff
-and always solve the problem we have now and the next unknown problem, leave it to another time
-to solve 😄.
+- It's important to remember two things about tokens and permissions. First, tokens should have a short lifetime and be refreshed regularly for security reasons, so users are likely to get new permissions if they change. Second, permission changes aren't always made frequently, so this problem may not come up often.
+
+- Overall, it's best to implement simple and effective solutions and not over-engineer things. Address the problems you have now and leave other potential problems for later. 😄.
