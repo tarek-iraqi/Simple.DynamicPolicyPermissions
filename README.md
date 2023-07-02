@@ -209,12 +209,11 @@ can pass as many permissions as you want to allow this scenario as the following
             public IActionResult GetUserDetails() => Ok("user details");
         }
         ```
-    - Now we reached the grand finally, what if I have a complex scenario where I need the user to
-must have `AddUser` and `EditUser` permissions <u>***OR***</u> must have `DeleteUser` and `ViewAllUsers`
-permissions to gain access to the resource, this is mixing between `Anding` and `Oring` permissions or 
-as we can define this as `Oring` between `Group Permission` where each group contains must have permissions
-and if the user exist in either one of the groups he can pass.
-To solve that you must do two things:
+    - Finally, imagine a complex scenario where a user needs either `AddUser` and `EditUser` permissions
+***OR*** `DeleteUser` and `ViewAllUsers` permissions to access a resource.
+This mixes `Anding` and `Oring` permissions, or in other words, uses `Oring` between `Group Permissions`.
+Each group contains required permissions, and if a user belongs to either group, they can access the resource.
+To solve this, you need to do two things:
 
         1. First define the permission groups you need using simple syntax of original permissions
         values and special separator between them `PermissionGroupSeparator` exist in library constants,
