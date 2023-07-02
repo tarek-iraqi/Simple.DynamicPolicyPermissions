@@ -1,4 +1,4 @@
-﻿# Simple  Dynamic Policy Permissions  ![release workflow](https://github.com/tarek-iraqi/Simple.DynamicPolicyPermissions/actions/workflows/publish.yaml/badge.svg?event=push)
+﻿# Simple  Dynamic Policy Permissions ![.Net version](https://img.shields.io/badge/.Net-7.0-blue) ![nuget](https://img.shields.io/nuget/v/Simple.DynamicPolicyPermissions?link=https%3A%2F%2Fwww.nuget.org%2Fpackages%2FSimple.DynamicPolicyPermissions) ![release workflow](https://github.com/tarek-iraqi/Simple.DynamicPolicyPermissions/actions/workflows/publish.yaml/badge.svg?event=push&branch=publish)
 .Net let you create authorization policies with specific requirements to allow users
 to access or not access resources, this is fine and works perfectly in small to medium
 applications with a few permissions and policies.
@@ -22,7 +22,7 @@ To integrate this library in your application after adding the nuget package:
 two authentication scheme to be used to authenticate users in the app JWT bearer and
 Cookies:
 ```csharp
-builder.Services.AddAuthentication()
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,
                 config =>
                 {
@@ -54,9 +54,21 @@ builder.Services.AddAuthentication()
                     };
                 });
 
+builder.Services.AddAuthorization(config => 
+    config.DefaultPolicy = new AuthorizationPolicyBuilder()
+            .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme,
+                CookieAuthenticationDefaults.AuthenticationScheme)
+            .RequireAuthenticatedUser()
+            .Build());
+
 ```
-> Note: any scheme you add will be automatically included in the dynamic policy
+> **Note**
+> Any scheme you add will be automatically included in the dynamic policy
 requirement as authentication scheme(s) to be used with.
+
+> **Note**
+> Here I added default authorization policy with all registered authentication schemes
+as a fallback strategy if I just want to use the normal `Authorize` attribute.
 
 2. Register dynamic policy permissions services with app DI:
 ```csharp

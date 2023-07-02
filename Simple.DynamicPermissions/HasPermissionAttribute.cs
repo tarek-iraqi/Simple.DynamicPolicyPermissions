@@ -6,7 +6,12 @@ namespace Simple.DynamicPolicyPermissions;
 public class HasPermissionAttribute : AuthorizeAttribute
 {
     public HasPermissionAttribute(params string[] permissions)
-        : base(permissions.Aggregate((a, b) => a + PermissionConstants.PermissionSeparator + b))
-    { }
+        : base(permissions is not null && permissions.Where(p => string.IsNullOrWhiteSpace(p) is false).Any()
+             ? permissions
+                .Where(p => string.IsNullOrWhiteSpace(p) is false)
+                .Aggregate((a, b) => a + PermissionConstants.PermissionSeparator + b)
+             : string.Empty)
+    {
+    }
 }
 

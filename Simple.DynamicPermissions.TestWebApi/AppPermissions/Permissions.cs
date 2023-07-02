@@ -11,4 +11,7 @@ public static class Permissions
 
     public const string AddEditGroup = $"{AddUser}{PermissionConstants.PermissionGroupSeparator}{EditUser}";
     public const string ViewDeleteGroup = $"{ViewAllUsers}{PermissionConstants.PermissionGroupSeparator}{DeleteUser}";
+
+    public const string ManageRoles = "5";
+    public const string AddRole = "6";
 }

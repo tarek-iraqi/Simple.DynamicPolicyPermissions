@@ -1,110 +1,55 @@
 ﻿using Microsoft.IdentityModel.Tokens;
-using Simple.DynamicPermissions.TestWebApi.AppPermissions;
-using Simple.DynamicPolicyPermissions;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
 namespace Simple.DynamicPermissions.Testing;
-public static class Helpers
+internal static class Helpers
 {
-    public static string UserHasNoPermissionsToken()
-    {
-        return GenerateAccessToken(Enumerable.Empty<Claim>());
-    }
+    internal static string UserHasNoPermissionsToken()
+        => GenerateAccessToken(Enumerable.Empty<Claim>());
 
-    public static string UserHasSuperAdminRoleToken()
-    {
-        var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Role, PermissionConstants.SUPER_ADMIN)
-        };
+    internal static string UserHasSuperAdminRoleToken()
+        => GenerateAccessToken(UserClaimsHelper.SuperAdminRoleClaim);
 
-        return GenerateAccessToken(claims);
-    }
+    internal static string UserHasConfigurableSuperRoleToken()
+        => GenerateAccessToken(UserClaimsHelper.ConfigurableSuperRoleClaim);
 
-    public static string UserHasConfigurableSuperRoleToken()
-    {
-        var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Role, "SUPER_USER")
-        };
+    internal static string UserHasAddUserPermissionToken()
+        => GenerateAccessToken(UserClaimsHelper.AddUserPermissionClaim);
 
-        return GenerateAccessToken(claims);
-    }
+    internal static string UserHasEditUserPermissionToken()
+        => GenerateAccessToken(UserClaimsHelper.EditUserPermissionClaim);
 
-    public static string UserHasAddUserPermissionToken()
-    {
-        var claims = new List<Claim>
-        {
-            new Claim(PermissionConstants.ActionPermission, Permissions.AddUser)
-        };
+    internal static string UserHasDeleteUserPermissionToken()
+        => GenerateAccessToken(UserClaimsHelper.DeleteUserPermissionClaim);
 
-        return GenerateAccessToken(claims);
-    }
+    internal static string UserHasViewAllUsersPermissionToken()
+        => GenerateAccessToken(UserClaimsHelper.ViewAllUsersPermissionClaim);
 
-    public static string UserHasEditUserPermissionToken()
-    {
-        var claims = new List<Claim>
-        {
-            new Claim(PermissionConstants.ActionPermission, Permissions.EditUser)
-        };
+    internal static string UserHasDeleteUserAndViewAllUsersPermissionsToken()
+        => GenerateAccessToken(UserClaimsHelper.DeleteUserAndViewAllUsersPermissionsClaims);
 
-        return GenerateAccessToken(claims);
-    }
+    internal static string UserHasAddEditPermissionGroupToken()
+        => GenerateAccessToken(UserClaimsHelper.AddEditPermissionGroupClaims);
 
-    public static string UserHasDeleteUserPermissionToken()
-    {
-        var claims = new List<Claim>
-        {
-            new Claim(PermissionConstants.ActionPermission, Permissions.DeleteUser)
-        };
+    internal static string UserHasViewDeletePermissionGroupToken()
+        => GenerateAccessToken(UserClaimsHelper.ViewDeletePermissionGroupClaims);
 
-        return GenerateAccessToken(claims);
-    }
+    internal static string UserHas3PermissionsToken()
+        => GenerateAccessToken(UserClaimsHelper.ThreePermissionsClaims);
 
-    public static string UserHasViewAllUsersPermissionToken()
-    {
-        var claims = new List<Claim>
-        {
-            new Claim(PermissionConstants.ActionPermission, Permissions.ViewAllUsers)
-        };
+    internal static string UserHas4PermissionsToken()
+        => GenerateAccessToken(UserClaimsHelper.FourPermissionsClaims);
 
-        return GenerateAccessToken(claims);
-    }
+    internal static string UserHasManageRolesPermissionToken()
+        => GenerateAccessToken(UserClaimsHelper.ManageRolesPermissionClaim);
 
-    public static string UserHasDeleteUserAndViewAllUsersPermissionsToken()
-    {
-        var claims = new List<Claim>
-        {
-            new Claim(PermissionConstants.ActionPermission, Permissions.DeleteUser),
-            new Claim(PermissionConstants.ActionPermission, Permissions.ViewAllUsers)
-        };
+    internal static string UserHasAddRolePermissionToken()
+        => GenerateAccessToken(UserClaimsHelper.AddRolePermissionClaim);
 
-        return GenerateAccessToken(claims);
-    }
-
-    public static string UserHasAddEditPermissionGroupToken()
-    {
-        var claims = new List<Claim>
-        {
-            new Claim(PermissionConstants.ActionPermission, Permissions.AddUser),
-            new Claim(PermissionConstants.ActionPermission, Permissions.EditUser)
-        };
-
-        return GenerateAccessToken(claims);
-    }
-
-    public static string UserHasViewDeletePermissionGroupToken()
-    {
-        var claims = new List<Claim>
-        {
-            new Claim(PermissionConstants.ActionPermission, Permissions.DeleteUser),
-            new Claim(PermissionConstants.ActionPermission, Permissions.ViewAllUsers)
-        };
-
-        return GenerateAccessToken(claims);
-    }
+    internal static string UserHasManageRoleAndAddRolePermissionsToken()
+        => GenerateAccessToken(UserClaimsHelper.ManageRoleAndAddRolePermissionsClaim);
 
     private static string GenerateAccessToken(IEnumerable<Claim> userClaims)
     {
@@ -117,7 +62,7 @@ public static class Helpers
             "webapi",
             userClaims.GroupBy(x => x.Value).Select(y => y.First()).Distinct(),
             DateTime.Now,
-            DateTime.Now.AddMinutes(10),
+            DateTime.Now.AddMinutes(60),
             credentials
         );
 

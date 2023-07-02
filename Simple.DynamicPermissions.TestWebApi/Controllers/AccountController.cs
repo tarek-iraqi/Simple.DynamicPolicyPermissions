@@ -23,11 +23,11 @@ public class AccountController : ControllerBase
 
 public class UserLoginModel
 {
-    public List<UserClaims> UserClaims { get; set; }
+    public List<UserClaims> UserClaims { get; set; } = new List<UserClaims>();
 }
 
 public class UserClaims
 {
-    public string Key { get; set; }
-    public string Value { get; set; }
+    public string Key { get; set; } = string.Empty;
+    public string Value { get; set; } = string.Empty;
 }

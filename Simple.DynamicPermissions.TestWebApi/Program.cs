@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Simple.DynamicPolicyPermissions;
 using System.Text;
@@ -39,6 +40,12 @@ builder.Services.AddAuthentication()
                         return Task.CompletedTask;
                     };
                 });
+
+builder.Services.AddAuthorization(config => config.DefaultPolicy = new AuthorizationPolicyBuilder()
+            .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme,
+                CookieAuthenticationDefaults.AuthenticationScheme)
+            .RequireAuthenticatedUser()
+            .Build());
 
 var app = builder.Build();
 

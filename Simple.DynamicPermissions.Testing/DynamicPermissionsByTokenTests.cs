@@ -18,7 +18,7 @@ public class DynamicPermissionsByTokenTests : IClassFixture<WebApplicationFactor
     {
         var client = _factory.CreateClient();
 
-        var response = await client.PostAsync("api/user", default);
+        var response = await client.PostAsync("api/users", default);
 
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
@@ -32,7 +32,7 @@ public class DynamicPermissionsByTokenTests : IClassFixture<WebApplicationFactor
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
-        var response = await client.PostAsync("api/user", default);
+        var response = await client.PostAsync("api/users", default);
 
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
@@ -46,7 +46,7 @@ public class DynamicPermissionsByTokenTests : IClassFixture<WebApplicationFactor
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
-        var response = await client.PostAsync("api/user", default);
+        var response = await client.PostAsync("api/users", default);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
@@ -60,7 +60,7 @@ public class DynamicPermissionsByTokenTests : IClassFixture<WebApplicationFactor
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
-        var response = await client.PostAsync("api/user", default);
+        var response = await client.PostAsync("api/users", default);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
@@ -74,7 +74,7 @@ public class DynamicPermissionsByTokenTests : IClassFixture<WebApplicationFactor
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
-        var response = await client.PostAsync("api/user", default);
+        var response = await client.PostAsync("api/users", default);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
@@ -88,7 +88,7 @@ public class DynamicPermissionsByTokenTests : IClassFixture<WebApplicationFactor
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
-        var response = await client.PostAsync("api/user", default);
+        var response = await client.PostAsync("api/users", default);
 
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
@@ -102,7 +102,7 @@ public class DynamicPermissionsByTokenTests : IClassFixture<WebApplicationFactor
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
-        var response = await client.PutAsync("api/user", default);
+        var response = await client.PutAsync("api/users", default);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
@@ -116,7 +116,7 @@ public class DynamicPermissionsByTokenTests : IClassFixture<WebApplicationFactor
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
-        var response = await client.PutAsync("api/user", default);
+        var response = await client.PutAsync("api/users", default);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
@@ -130,7 +130,7 @@ public class DynamicPermissionsByTokenTests : IClassFixture<WebApplicationFactor
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
-        var response = await client.DeleteAsync("api/user");
+        var response = await client.DeleteAsync("api/users");
 
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
@@ -144,7 +144,7 @@ public class DynamicPermissionsByTokenTests : IClassFixture<WebApplicationFactor
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
-        var response = await client.DeleteAsync("api/user");
+        var response = await client.DeleteAsync("api/users");
 
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
@@ -158,7 +158,7 @@ public class DynamicPermissionsByTokenTests : IClassFixture<WebApplicationFactor
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
-        var response = await client.DeleteAsync("api/user");
+        var response = await client.DeleteAsync("api/users");
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
@@ -172,7 +172,7 @@ public class DynamicPermissionsByTokenTests : IClassFixture<WebApplicationFactor
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
-        var response = await client.GetAsync("api/user");
+        var response = await client.GetAsync("api/users");
 
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
@@ -186,7 +186,7 @@ public class DynamicPermissionsByTokenTests : IClassFixture<WebApplicationFactor
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
-        var response = await client.GetAsync("api/user");
+        var response = await client.GetAsync("api/users");
 
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
@@ -200,7 +200,7 @@ public class DynamicPermissionsByTokenTests : IClassFixture<WebApplicationFactor
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
-        var response = await client.GetAsync("api/user");
+        var response = await client.GetAsync("api/users");
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
@@ -214,7 +214,177 @@ public class DynamicPermissionsByTokenTests : IClassFixture<WebApplicationFactor
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
-        var response = await client.GetAsync("api/user");
+        var response = await client.GetAsync("api/users");
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+    }
+
+    [Fact]
+    public async Task GetUserDetails_AuthenticatedUserWithOnePermission_ReturnForbidden()
+    {
+        var client = _factory.CreateClient();
+
+        var token = Helpers.UserHasAddUserPermissionToken();
+
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+
+        var response = await client.GetAsync("api/users/1");
+
+        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+    }
+
+    [Fact]
+    public async Task GetUserDetails_AuthenticatedUserWith3Permissions_ReturnForbidden()
+    {
+        var client = _factory.CreateClient();
+
+        var token = Helpers.UserHas3PermissionsToken();
+
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+
+        var response = await client.GetAsync("api/users/1");
+
+        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+    }
+
+    [Fact]
+    public async Task GetUserDetails_AuthenticatedUserWith4Permissions_ReturnOk()
+    {
+        var client = _factory.CreateClient();
+
+        var token = Helpers.UserHas4PermissionsToken();
+
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+
+        var response = await client.GetAsync("api/users/1");
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+    }
+
+    [Fact]
+    public async Task GetUserStatus_AnonymousUserAndEmptyPermissionValue_ReturnUnAuthorized()
+    {
+        var client = _factory.CreateClient();
+
+        var response = await client.GetAsync("api/users/1/status");
+
+        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+    }
+
+    [Fact]
+    public async Task GetUserStatus_AuthenticatedUserAndEmptyPermissionValue_ReturnOk()
+    {
+        var client = _factory.CreateClient();
+
+        var token = Helpers.UserHasNoPermissionsToken();
+
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+
+        var response = await client.GetAsync("api/users/1/status");
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+    }
+
+    [Fact]
+    public async Task GetUserAddress_AnonymousUserAndNullPermissionValue_ReturnUnAuthorized()
+    {
+        var client = _factory.CreateClient();
+
+        var response = await client.GetAsync("api/users/1/address");
+
+        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+    }
+
+    [Fact]
+    public async Task GetUserAddress_AuthenticatedUserAndNullPermissionValue_ReturnOk()
+    {
+        var client = _factory.CreateClient();
+
+        var token = Helpers.UserHasNoPermissionsToken();
+
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+
+        var response = await client.GetAsync("api/users/1/address");
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+    }
+
+    [Fact]
+    public async Task GetUserEmail_AnonymousUserAndNoPermissionValue_ReturnUnAuthorized()
+    {
+        var client = _factory.CreateClient();
+
+        var response = await client.GetAsync("api/users/1/email");
+
+        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+    }
+
+    [Fact]
+    public async Task GetUserEmail_AuthenticatedUserAndNoPermissionValue_ReturnOk()
+    {
+        var client = _factory.CreateClient();
+
+        var token = Helpers.UserHasNoPermissionsToken();
+
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+
+        var response = await client.GetAsync("api/users/1/email");
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+    }
+
+    [Fact]
+    public async Task GetRoles_AuthenticatedUserWithManageRolesPermission_ReturnOk()
+    {
+        var client = _factory.CreateClient();
+
+        var token = Helpers.UserHasManageRolesPermissionToken();
+
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+
+        var response = await client.GetAsync("api/roles");
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+    }
+
+    [Fact]
+    public async Task AddRole_AuthenticatedUserWithManageRolesPermission_ReturnForbidden()
+    {
+        var client = _factory.CreateClient();
+
+        var token = Helpers.UserHasManageRolesPermissionToken();
+
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+
+        var response = await client.PostAsync("api/roles", default);
+
+        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+    }
+
+    [Fact]
+    public async Task AddRole_AuthenticatedUserWithAddRolePermission_ReturnForbidden()
+    {
+        var client = _factory.CreateClient();
+
+        var token = Helpers.UserHasAddRolePermissionToken();
+
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+
+        var response = await client.PostAsync("api/roles", default);
+
+        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+    }
+
+    [Fact]
+    public async Task AddRole_AuthenticatedUserWithManageRolesAndAddRolePermissions_ReturnOk()
+    {
+        var client = _factory.CreateClient();
+
+        var token = Helpers.UserHasManageRoleAndAddRolePermissionsToken();
+
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+
+        var response = await client.PostAsync("api/roles", default);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
