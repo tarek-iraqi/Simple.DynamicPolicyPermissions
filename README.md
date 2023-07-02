@@ -236,11 +236,9 @@ in the access token, like a timestamp or security stamp, you can update this val
 database or cache layer when the user's permissions change. 
 Then, in the next request with the old access token, you can compare the token value with 
 the cached value and revoke the token if they don't match.
-This will prompt the user to log in again and get the new permissions.
-
-- Another better and clean solution is you can send a particular response to the user interface
+This will prompt the user to log in again and get the new permissions.Another better and clean solution is you can send a particular response to the user interface
 so that it can refresh the user token without the user having to log out or notice any changes.
 
 - It's important to remember two things about tokens and permissions. First, tokens should have a short lifetime and be refreshed regularly for security reasons, so users are likely to get new permissions if they change. Second, permission changes aren't always made frequently, so this problem may not come up often.
 
-- Overall, it's best to implement simple and effective solutions and not over-engineer things. Address the problems you have now and leave other potential problems for later. 😄.
+- Overall, it's best to implement simple and effective solutions and not over-engineer things. Address the problems you have now and leave other potential problems for later. 😄
