@@ -22,7 +22,7 @@ To integrate this library in your application after adding the nuget package:
 two authentication scheme to be used to authenticate users in the app JWT bearer and
 Cookies:
 ```csharp
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+builder.Services.AddAuthentication()
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,
                 config =>
                 {
