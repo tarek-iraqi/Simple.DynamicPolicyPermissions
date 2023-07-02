@@ -1,4 +1,4 @@
-# Simple  Dynamic Policy Permissions
+﻿# Simple  Dynamic Policy Permissions
 .Net let you create authorization policies with specific requirements to allow users
 to access or not access resources, this is fine and works perfectly in small to medium
 applications with a few permissions and policies.
@@ -226,6 +226,27 @@ To solve that you must do two things:
             }
             ```
 
-That is all you need to know to work with the library, for examples you can see the project
-`Simple.DynamicPermissions.TestWebApi` in the repo.
+That is all you need to know to work with the library, for examples you can see the project `Simple.DynamicPermissions.TestWebApi` in the repo.
 
+## Some points to mention
+- Some can argue that the solution of keeping user permissions is not valid or effective in specific
+cases, such as what if while the user is logged in his permissions is changed by the administrator by
+adding more permissions or removing extra access, in this scenario the user is still maintaining the
+old permissions from his access token, not the new ones.
+
+- I have faced the same problem one time and it has a very simple solution, just keep track of a specific value in the access token such as
+timestamp or security stamp and when the user permissions change you update this value in the database or better in a cache layer, so in the
+next request with the old access token there will be a difference between this value so you can revoke
+the token and return an UnAuthorized response so the user log in again and get the new permissions or better
+return a specific response to the front so it can make a silent call to refresh the user token
+without the user logging out or feeling any change.
+
+- Also, do not forget two important facts about tokens and permissions, first the best practice for a token lifetime is to be short and refreshed in small
+intervals for security reasons so the user most likely will gain the new permissions if changed. The
+the second point is that permissions changing are not always something done every day, we can consider
+it is a setup done at application's first run and often changes at long intervals across the
+app lifetime, so this problem will probably not be caused or noticed in most cases.
+
+- At the last we all try to implement a simple and effective solutions not over engineering stuff
+and always solve the problem we have now and the next unknown problem, leave it to another time
+to solve 😄.
