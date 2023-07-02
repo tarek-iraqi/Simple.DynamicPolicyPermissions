@@ -236,7 +236,7 @@ old permissions from his access token, not the new ones.
 
 - I have faced the same problem one time and it has a very simple solution, just keep track of a specific value in the access token such as
 timestamp or security stamp and when the user permissions change you update this value in the database or better in a cache layer, so in the
-next request with the old access token there will be a difference between this value so you can revoke
+next request with the old access token there will be a difference between the token value and the cached value so you can revoke
 the token and return an UnAuthorized response so the user log in again and get the new permissions or better
 return a specific response to the front so it can make a silent call to refresh the user token
 without the user logging out or feeling any change.
