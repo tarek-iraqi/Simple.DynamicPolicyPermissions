@@ -59,14 +59,14 @@ builder.Services.AddAuthentication()
 requirement as authentication scheme(s) to be used with.
 
 2. Register dynamic policy permissions services with app DI:
-```charp
+```csharp
 builder.Services.AddDynamicPolicyPermissions();
 ```
 3. Define your application custom permissions as constant key and value, you can
 later map those values to a permission table in a database or any storage source
 you use, the most important thing that the values must be ***unique***, for example
 here I define four permissions for user management:
-```charp
+```csharp
 public static class Permissions
 {
     public const string AddUser = "1";
@@ -78,7 +78,7 @@ public static class Permissions
 4. Add permissions to your endpoints by using `HasPermission` attribute and passing
 your permission name as an argument to it, for example here I add `AddUser` and `EditUser` 
 permissions to two api endpoints:
-```charp
+```csharp
 [ApiController]
 [Route("api/[controller]")]
 public class UserController : ControllerBase
@@ -93,10 +93,11 @@ public class UserController : ControllerBase
 }
 ```
 5- Finally to complete the flow all you need is adding authenticated user permissions 
-to his access token or cookie as a claim with the claim type `access_permission` and
-calim value you defined earlier in the constant, for example here I add the user claims
+to his access token or cookie as a claim with the claim type `action_permission` _(you can use
+library constant with name `PermissionConstants.ActionPermission` to get this value]_ and
+calim value for your custom permission, for example here I add the user claims
 to the access token:
-```charp
+```csharp
 private static string GenerateAccessToken()
 {
     var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("35ffc99e-59f8-4b85-97f5-1df3c76d9ea4"));
@@ -121,14 +122,14 @@ private static string GenerateAccessToken()
     return new JwtSecurityTokenHandler().WriteToken(token);
 }
 ```
-And that is all, if you test now with the user he will have access to these endpoints
-if he has this permissions in his access token and if not he will recieve 403 forbidden.
+And that is all, if you test now with a user having these permissions in his access token he will have access 
+to these endpoints, and if not he will recieve 403 forbidden.
 
 ## What features you will have
 1. First of all this is very flexible to work with user permissions or role permissions
 if your system has the feature to create dynamic roles with different permissions, for
 example if you use Identity in your app you can save these permissions in user claims
-or role calims and then after user login you grap all user calims or role claims in his
+or role claims and then after user login you grap all user calims or role claims in his
 token and every thing will work fine.
 
 2. In any application there always a role or a certain user type which will have
@@ -146,7 +147,7 @@ value with two new values defining them as array of strings in my appsettings:
 3. The `HasPermission` attribute can be added at the level of controller or action methods, for
 example if I have a permission with the name `ManageUsers` and I want this to be applied accross
 all action methods in the `UserController`, I add it as following:
-```charp
+```csharp
 [ApiController]
 [Route("api/[controller]")]
 [HasPermission(Permissions.ManageUsers)]
@@ -158,7 +159,7 @@ public class UserController : ControllerBase
 
 4. This library does not override or interfere with the normal behaviour of .Net in definig
 normal policies and roles, so you still can add your specific polices and roles side by side
-and use the `Auhhorize` attribute in your controllers in the normal way.
+and use the `Authorize` attribute in your controllers in the normal way.
 
 5. Keeping the best at last, this is the most important feature you will gain from using this
 library. The first thing you need to know is that the `HasPermission` attribute has some magic in
@@ -171,7 +172,7 @@ user has the specified permission to gain access, we already saw that.
 resource, for example I need the user to must have `AddUser` and `EditUser` permissions to view
 user details, to solve that just add the `HasPermission` attribute twice which will result in `Anding`
 the two permissions together to allow access to this resource as the following example:
-        ```charp
+        ```csharp
         [ApiController]
         [Route("api/[controller]")]
         public class UserController : ControllerBase
@@ -186,8 +187,8 @@ the two permissions together to allow access to this resource as the following e
     either `AddUser` or `EditUser` permission, no problem just pass the two permissions to the
 `HasPermission` attribute as array of strings and you are good to go, doing that will result in 
 `Oring` the two permissions together so if the user has one of them he will be authorized, you
-can pass as many permissions as you want to allow this scenario as following example:
-        ```charp
+can pass as many permissions as you want to allow this scenario as the following example:
+        ```csharp
         [ApiController]
         [Route("api/[controller]")]
         public class UserController : ControllerBase
@@ -204,7 +205,7 @@ as we can define this as `Oring` between `Group Permission` where each group con
 and if the user exist in either one of the groups he can pass.
 To solve that you must do two things:
 
-        1. First define the permission groups you need using simple synatax of original permissions
+        1. First define the permission groups you need using simple syntax of original permissions
         values and special separator between them `PermissionGroupSeparator` exist in library constants,
         for example here I define the two groups we discussed above:
 
@@ -214,7 +215,7 @@ To solve that you must do two things:
             ```
         2. All you need now is to use these groups with `HasPermission` attribure as normal by
         passing them as arguments as following:
-            ```charp
+            ```csharp
             [ApiController]
             [Route("api/[controller]")]
             public class UserController : ControllerBase
