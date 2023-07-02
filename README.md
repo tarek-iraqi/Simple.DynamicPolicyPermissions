@@ -1,4 +1,4 @@
-﻿# Simple  Dynamic Policy Permissions  ![release workflow](https://github.com/tarek-iraqi/Simple.DynamicPolicyPermissions/actions/workflows/publish.yaml/badge.svg)
+﻿# Simple  Dynamic Policy Permissions  ![release workflow](https://github.com/tarek-iraqi/Simple.DynamicPolicyPermissions/actions/workflows/publish.yaml/badge.svg?event=push)
 .Net let you create authorization policies with specific requirements to allow users
 to access or not access resources, this is fine and works perfectly in small to medium
 applications with a few permissions and policies.
