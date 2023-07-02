@@ -135,29 +135,28 @@ private static string GenerateAccessToken()
 }
 ```
 And that is all, if you test now with a user having these permissions in his access token he will have access 
-to these endpoints, and if not he will recieve 403 forbidden.
+to these endpoints, and if not he will receive 403 forbidden.
 
 ## What features you will have
-1. First of all this is very flexible to work with user permissions or role permissions
+1. First of all this library is very flexible to work with user permissions or role permissions
 if your system has the feature to create dynamic roles with different permissions, for
 example if you use Identity in your app you can save these permissions in user claims
-or role claims and then after user login you grap all user calims or role claims in his
+or role claims and then after user login you get all user calims or role claims in his
 token and every thing will work fine.
 
-2. In any application there always a role or a certain user type which will have
-complete access to every thing without restrictions as super user or super admin,
-by default the library is checking for a role with the name `SUPER_ADMIN`, if the user
-has this role value he will bypass any authorization and get full access. You can
-override this value with your own custom values by adding a configuration in your
-application appsettings or environment variables, for example here I override this
-value with two new values defining them as array of strings in my appsettings:
+2. Most applications have a specific user type or role, like a super user or super admin,
+that has unrestricted access to everything. The library checks if the user has a role 
+called `SUPER_ADMIN` and grants them full access if they do.
+You can customize this by adding a configuration in your appsettings or environment variables.
+For example, you can set your own custom values as an array of strings in your appsettings
+to override the default value as following:
 ```json
 "DynamicPolicyPermissions": {
     "SuperRoles": [ "ADMINSTRATOR", "SUPER_USER" ]
 }
 ```
 3. The `HasPermission` attribute can be added at the level of controller or action methods, for
-example if I have a permission with the name `ManageUsers` and I want this to be applied accross
+example if I have a permission with the name `ManageUsers` and I want this to be applied across
 all action methods in the `UserController`, I add it as following:
 ```csharp
 [ApiController]
@@ -169,7 +168,7 @@ public class UserController : ControllerBase
 }
 ```
 
-4. This library does not override or interfere with the normal behaviour of .Net in definig
+4. This library does not override or interfere with the normal behaviour of .Net in defining
 normal policies and roles, so you still can add your specific polices and roles side by side
 and use the `Authorize` attribute in your controllers in the normal way.
 
@@ -182,7 +181,7 @@ user has the specified permission to gain access, we already saw that.
 
     - What if I have a requirement that the user must have two permissions to gain access to a 
 resource, for example I need the user to must have `AddUser` and `EditUser` permissions to view
-user details, to solve that just add the `HasPermission` attribute twice which will result in `Anding`
+user details, to solve this just add the `HasPermission` attribute twice which will result in `Anding`
 the two permissions together to allow access to this resource as the following example:
         ```csharp
         [ApiController]
