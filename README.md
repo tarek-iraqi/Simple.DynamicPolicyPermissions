@@ -1,19 +1,18 @@
 ﻿# Simple  Dynamic Policy Permissions ![.Net version](https://img.shields.io/badge/.Net-7.0-blue) ![nuget](https://img.shields.io/nuget/v/Simple.DynamicPolicyPermissions?link=https%3A%2F%2Fwww.nuget.org%2Fpackages%2FSimple.DynamicPolicyPermissions) ![release workflow](https://github.com/tarek-iraqi/Simple.DynamicPolicyPermissions/actions/workflows/publish.yaml/badge.svg?event=push&branch=publish)
-.Net let you create authorization policies with specific requirements to allow users
-to access or not access resources, this is fine and works perfectly in small to medium
-applications with a few permissions and policies.
+In .Net, you can create authorization policies with specific requirements 
+to allow or deny user access to resources.
+This works well for small to medium applications with few permissions and policies.
+However, if you have many permissions and they're increasing over time,
+creating 50 to 100 policies for each permission can be overwhelming.
+It becomes even more complicated when you consider the various policy
+combinations and possibilities.
 
-But what if you have a lot of permissions in your system and increasing over time
-can you imagine creating 50 or 100 and more policy for each permission !!, what
-about the combination between them and the possibilities you would have, I think you
-starting to see the problem here.
-
-The answer is **dynamic authorization policy**, what if we can create these huge 
-amount of policies in a dynamic way in the application runtime without the need
-to define each policy and keep track of them.
-
-This library implement this solution in a simple and easy way with simple steps and
-some common sense, so let's get start to know how.
+The solution to this problem is ***dynamic authorization policies***. 
+Instead of defining each policy and keeping track of them,
+what if we could create policies dynamically during application runtime?
+This library provides a simple and easy way to implement this
+solution using common sense and a few simple steps. 
+Let's get started and learn how it works.
 
 ## Setup
 To integrate this library in your application after adding the nuget package:
