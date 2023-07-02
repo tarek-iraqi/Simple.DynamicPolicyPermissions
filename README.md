@@ -229,7 +229,7 @@ To solve that you must do two things:
 That is all you need to know to work with the library, for examples you can see the project `Simple.DynamicPermissions.TestWebApi` in the repo.
 
 ## Some points to mention
-- Some can argue that the solution of keeping user permissions is not valid or effective in specific
+- Some can argue that the solution of keeping user permissions in user token or cookie is not valid or effective in specific
 cases, such as what if while the user is logged in his permissions is changed by the administrator by
 adding more permissions or removing extra access, in this scenario the user is still maintaining the
 old permissions from his access token, not the new ones.
